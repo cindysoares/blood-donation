@@ -48,21 +48,16 @@ export class EsriMapComponent implements OnInit {
         Map,
         MapView
       ]: [ __esri.MapConstructor, __esri.MapViewConstructor]) => {
-        const mapProperties: __esri.MapProperties = {
-          basemap: 'streets'
-        };
 
-        const map = new Map(mapProperties);
+        const map = new Map({basemap: 'streets'});
 
-        console.log('mapping properties')
-        const mapViewProperties: __esri.MapViewProperties = {
+        const mapViewProperties = {
           container: this.mapViewEl.nativeElement,          
           map 
         };
 
-        console.log("location => " + this.location)
         if(this.location) {
-        	mapViewProperties['center']=[this.location['longitude'], this.location['latitude']]
+        	mapViewProperties['center']=[this.location.longitude, this.location.latitude]
         	mapViewProperties['zoom']=12
         } else {
         	mapViewProperties['center']=[0, 0]
