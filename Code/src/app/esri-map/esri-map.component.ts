@@ -11,7 +11,6 @@ export class EsriMapComponent implements OnInit {
   location = null;
   
   setPosition(position){
-    console.log("position => " + position)
   	if(position) {
    		this.location = position.coords;
    	}
@@ -20,8 +19,10 @@ export class EsriMapComponent implements OnInit {
   loadPosition() {
    	if(navigator.geolocation){
 		navigator.geolocation.getCurrentPosition(this.setPosition.bind(this), function() {
-			console.log("geolocation blocked.");
+			console.log("Geolocation was blocked.");
 		}, { enableHighAccuracy: false, timeout: 5000, maximumAge: 300000 });
+	} else {
+		console.log('Geolocation is not supported by this browser.')
 	}
   }    
 
