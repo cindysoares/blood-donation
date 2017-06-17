@@ -7,6 +7,12 @@ import { EsriLoaderService } from 'angular2-esri-loader';
   styleUrls: ['./esri-map.component.css']
 })
 export class EsriMapComponent implements OnInit {
+	
+	location = {};
+  	setPosition(position){
+    	this.location = position.coords;
+    	console.log(this.location);
+    }
 
   public mapView: __esri.MapView;
 
@@ -17,6 +23,12 @@ export class EsriMapComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
+    if(navigator.geolocation){
+    	navigator.geolocation.getCurrentPosition(this.setPosition.bind(this));
+    } else {
+    	console.log('no position');
+    }
+
     return this.esriLoader.load({
       url: 'https://js.arcgis.com/4.3/'
     }).then(() => {
@@ -36,7 +48,7 @@ export class EsriMapComponent implements OnInit {
 
         const mapViewProperties: __esri.MapViewProperties = {
           container: this.mapViewEl.nativeElement,
-          center: [-12.287, -37.114],
+          center: [this.location['longitude'], this.location['latitude']],
           zoom: 12,
           map 
         };
