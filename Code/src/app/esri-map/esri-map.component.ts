@@ -8,11 +8,22 @@ import { EsriLoaderService } from 'angular2-esri-loader';
 })
 export class EsriMapComponent implements OnInit {
 	
-	location = {};
-  	setPosition(position){
-    	this.location = position.coords;
-    	console.log(this.location);
-    }
+  location = null;
+  
+  setPosition(position){
+    console.log("position => " + position)
+  	if(position) {
+   		this.location = position.coords;
+   	}
+  }
+
+  loadPosition() {
+   	if(navigator.geolocation){
+		navigator.geolocation.getCurrentPosition(this.setPosition.bind(this), function() {
+			console.log("geolocation blocked.");
+		}, { enableHighAccuracy: false, timeout: 5000, maximumAge: 300000 });
+	}
+  }    
 
   public mapView: __esri.MapView;
 
@@ -23,11 +34,7 @@ export class EsriMapComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
-    if(navigator.geolocation){
-    	navigator.geolocation.getCurrentPosition(this.setPosition.bind(this));
-    } else {
-    	console.log('no position');
-    }
+  	this.loadPosition();
 
     return this.esriLoader.load({
       url: 'https://js.arcgis.com/4.3/'
@@ -46,12 +53,20 @@ export class EsriMapComponent implements OnInit {
 
         const map = new Map(mapProperties);
 
+        console.log('mapping properties')
         const mapViewProperties: __esri.MapViewProperties = {
-          container: this.mapViewEl.nativeElement,
-          center: [this.location['longitude'], this.location['latitude']],
-          zoom: 12,
+          container: this.mapViewEl.nativeElement,          
           map 
         };
+
+        console.log("location => " + this.location)
+        if(this.location) {
+        	mapViewProperties['center']=[this.location['longitude'], this.location['latitude']]
+        	mapViewProperties['zoom']=12
+        } else {
+        	mapViewProperties['center']=[0, 0]
+        	mapViewProperties['zoom']=2
+        }
 
         this.mapView = new MapView(mapViewProperties);
       });
