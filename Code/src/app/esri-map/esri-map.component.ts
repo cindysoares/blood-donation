@@ -43,11 +43,17 @@ export class EsriMapComponent implements OnInit {
       this.esriLoader.loadModules([
         'esri/Map',
         'esri/views/MapView',
+        'esri/geometry/Point',
+        'esri/symbols/SimpleMarkerSymbol',
+        "esri/Graphic",
   		'dojo/domReady!'
       ]).then(([
         Map,
-        MapView
-      ]: [ __esri.MapConstructor, __esri.MapViewConstructor]) => {
+        MapView, 
+        Point,
+        SimpleMarkerSymbol,
+        Graphic
+      ]: [ __esri.MapConstructor, __esri.MapViewConstructor, __esri.PointConstructor, __esri.SimpleMarkerSymbolConstructor, __esri.GraphicConstructor]) => {
 
         const map = new Map({basemap: 'streets'});
 
@@ -65,6 +71,43 @@ export class EsriMapComponent implements OnInit {
         }
 
         this.mapView = new MapView(mapViewProperties);
+
+        if(this.location) {
+            var point = new Point({
+        		longitude: this.location.longitude, 
+        		latitude: this.location.latitude}
+        	);
+        	var marker = new SimpleMarkerSymbol({
+			  	//color: "palegreen"
+			});
+
+        	var lineAtt = {
+    			Name: "Keystone Pipeline",  // The name of the pipeline
+    			Owner: "TransCanada",  // The owner of the pipeline
+    			Length: "3,456 km"  // The length of the pipeline
+  			};
+
+  			var polylineGraphic = new Graphic({
+    			geometry: point,   // Add the geometry created in step 4
+    			symbol: marker,   // Add the symbol created in step 5
+    			attributes: lineAtt,   // Add the attributes created in step 6
+    			popupTemplate: {
+		      	title: "{Name}",
+		      	content: [{
+		        	type: "fields",
+		        	fieldInfos: [{
+		          		fieldName: "Name"
+		        	}, {
+		          		fieldName: "Owner"
+		        	}, {
+		          		fieldName: "Length"
+		        	}]
+		      	}]
+		    	}
+  			});
+  			this.mapView.graphics.add(polylineGraphic);
+        }
+        
       });
     });
   }
