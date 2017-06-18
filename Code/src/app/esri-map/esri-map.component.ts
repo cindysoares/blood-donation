@@ -7,24 +7,6 @@ import { EsriLoaderService } from 'angular2-esri-loader';
   styleUrls: ['./esri-map.component.css']
 })
 export class EsriMapComponent implements OnInit {
-	
-  location = null;
-  
-  setPosition(position){
-  	if(position) {
-   		this.location = position.coords;
-   	}
-  }
-
-  loadPosition() {
-   	if(navigator.geolocation){
-		navigator.geolocation.getCurrentPosition(this.setPosition.bind(this), function() {
-			console.log("Geolocation was blocked.");
-		}, { enableHighAccuracy: false, timeout: 5000, maximumAge: 300000 });
-	} else {
-		console.log('Geolocation is not supported by this browser.')
-	}
-  }    
 
   public mapView: __esri.MapView;
 
@@ -35,8 +17,6 @@ export class EsriMapComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
-  	this.loadPosition();
-
     return this.esriLoader.load({
       url: 'https://js.arcgis.com/4.3/'
     }).then(() => {
@@ -58,19 +38,14 @@ export class EsriMapComponent implements OnInit {
         const map = new Map({basemap: 'streets'});
 
         const mapViewProperties = {
-          container: this.mapViewEl.nativeElement,          
+          container: this.mapViewEl.nativeElement, 
+          center: [0, 0],
+          zoom: 2,    
           map 
         };
 
-        if(this.location) {
-        	mapViewProperties['center']=[this.location.longitude, this.location.latitude]
-        	mapViewProperties['zoom']=15
-        } else {
-        	mapViewProperties['center']=[0, 0]
-        	mapViewProperties['zoom']=2
-        }
-
         this.mapView = new MapView(mapViewProperties);
+        this.locate(this.mapView);
 
         this.setOpenDonorFormOnClick(this.mapView);
         
@@ -81,7 +56,6 @@ export class EsriMapComponent implements OnInit {
         	{longitude:-43.18, latitude:-22.814, firstName: 'Dandara', bloodGroup: "AB+"}
         ];
         this.createMarkerForDonors(this.mapView, donors);
-
 
       });
     });
@@ -124,7 +98,6 @@ export class EsriMapComponent implements OnInit {
   createMarkerForDonors(view, donors) {
   	var component = this;
   	donors.forEach(function(donor, index, arr) {
-  		console.log(donor)
   		component.createAMarkerAt(view, donor);
   	});
   }
@@ -167,6 +140,21 @@ export class EsriMapComponent implements OnInit {
 		      	}
 			});
 			view.graphics.add(polylineGraphic);
+  	});
+  }
+
+  locate(view) {
+  	this.esriLoader.require(["esri/widgets/Locate"], function(Locate) {
+  		var locateWidget = new Locate({
+  			view: view,
+  			goToLocationEnabled: false
+		}, "locateDiv");
+
+		locateWidget.locate().then(function(){
+			var lon = locateWidget.graphic.geometry.longitude;
+			var lat = locateWidget.graphic.geometry.latitude;
+  			view.goTo({center: [lon, lat], zoom: 15})
+		});
   	});
   }
 
