@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { EsriLoaderService } from 'angular2-esri-loader';
 
+import { DonorsService } from '../donors.service';
+
 @Component({
   selector: 'app-esri-map',
   templateUrl: './esri-map.component.html',
@@ -9,11 +11,13 @@ import { EsriLoaderService } from 'angular2-esri-loader';
 export class EsriMapComponent implements OnInit {
 
   public mapView: __esri.MapView;
+  donors: any = [];
 
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
 
   constructor(
-    private esriLoader: EsriLoaderService
+    private esriLoader: EsriLoaderService,
+    private donorsService: DonorsService
   ) { }
 
   public ngOnInit() {
@@ -49,13 +53,10 @@ export class EsriMapComponent implements OnInit {
 
         this.setOpenDonorFormOnClick(this.mapView);
         
-        var donors = [
-        	{longitude:-43.187, latitude:-22.806, firstName: 'Agatha', bloodGroup: "A+"},
-        	{longitude:-43.189, latitude:-22.799, firstName: 'Bernie', bloodGroup: "B-"},
-        	{longitude:-43.173, latitude:-22.798, firstName: 'Carlos', bloodGroup: "O+"},
-        	{longitude:-43.18, latitude:-22.814, firstName: 'Dandara', bloodGroup: "AB+"}
-        ];
-        this.createMarkerForDonors(this.mapView, donors);
+        this.donorsService.getDonors().subscribe(donors => {
+          this.donors = donors;
+          this.createMarkerForDonors(this.mapView, this.donors);
+        });        
 
       });
     });
