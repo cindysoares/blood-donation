@@ -93,6 +93,7 @@ export class EsriMapComponent implements OnInit {
     	var lat = Math.round(event.mapPoint.latitude * 1000) / 1000;
     	var lon = Math.round(event.mapPoint.longitude * 1000) / 1000;
 
+    	view.popup.clear();
     	view.popup.dockOptions = {buttonEnabled: false, breakpoint: false};
     	view.popup.open({
         	title: "New Donor Information",
