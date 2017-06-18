@@ -93,23 +93,29 @@ export class EsriMapComponent implements OnInit {
     	var lat = Math.round(event.mapPoint.latitude * 1000) / 1000;
     	var lon = Math.round(event.mapPoint.longitude * 1000) / 1000;
 
+    	view.popup.dockOptions = {buttonEnabled: false, breakpoint: false};
     	view.popup.open({
         	title: "New Donor Information",
-        	location: event.mapPoint,
-        	content: [{
+        	location: {longitude: lon, latitude: lat},
+        	content: "Aqui entra o formulario"/*[{
 		        	type: "fields",
 		        	fieldInfos: [{
-		          		fieldName: "First Name"
+		          		fieldName: "firstName",
+		          		label: "First Name"
 		        	}, {
-		          		fieldName: "Last Name"
+		          		fieldName: "lastName",
+		          		label: "Last Name"
 		        	}, {
-		          		fieldName: "Contact Number"
+		          		fieldName: "contactNumber",
+		          		label: "Contact Number"
 		        	}, {
-		          		fieldName: "Address"
+		          		fieldName: "address",
+		          		label: "Address"
 		        	}, {
-		          		fieldName: "Blood Group"
+		          		fieldName: "bloodGroup",
+		          		label: "BloodGroup"
 		        	}]
-		      	}]
+		      	}]*/
     	});
 	});
   }
