@@ -145,7 +145,7 @@ export class EsriMapComponent implements OnInit {
   		) {
 		    var point = new Point(donor);
 			var marker = new SimpleMarkerSymbol({
-			  	//color: "palegreen"
+			  	color: "red"
 			});
 
 			var lineAtt = {
@@ -161,7 +161,7 @@ export class EsriMapComponent implements OnInit {
 				symbol: marker,
 				attributes: donor,
 				popupTemplate: {
-      				title: "{firstName} ({bloodGroup})",
+      				title: "{firstName} {lastName} ({bloodGroup})",
 					content: "<a link=\"#\">click to show</a>"
 		      	}
 			});
