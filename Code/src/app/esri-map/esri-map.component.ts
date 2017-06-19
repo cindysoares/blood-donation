@@ -118,18 +118,13 @@ export class EsriMapComponent implements OnInit {
         SimpleMarkerSymbol,
         Graphic
   		) {
-		    var point = new Point(donor);
+		  
+      var point = new Point({
+        longitude: donor.loc.coordinates[0], latitude: donor.loc.coordinates[1]
+      });
 			var marker = new SimpleMarkerSymbol({
 			  	color: "red"
 			});
-
-			var lineAtt = {
-				firstName: "Cindy",
-				lastName: "Moore",
-				contactNumber: "+55 21 999999999",
-				address: "Some St, 555",
-				bloodGroup: "A+"
-			};
 
 			var polylineGraphic = new Graphic({
 				geometry: point,
