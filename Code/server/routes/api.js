@@ -10,13 +10,18 @@ router.get('/', (req, res) => {
 
 router.get('/donors', (req, res) => {
 	var coordinates = [req.query.longitude, req.query.latitude]
-	var maxDistance = req.query.maxDistance
-	console.log("=> Getting donors near " + coordinates + " at max distance equals " + maxDistance )
+	var maxDistance =  parseInt(req.query.maxDistance)
 	var Donor = mongoose.model('Donor');
 	nearQuery = {
-		$near: coordinates,
-		$maxDistance: maxDistance
-	}
+     $near: {
+       $geometry: {
+          type: "Point" ,
+          coordinates: [req.query.longitude, req.query.latitude]
+       },
+       $maxDistance: maxDistance
+     }
+   }
+   console.log(nearQuery)
 	Donor.find({loc: nearQuery}, function(err, donors) {
 		if(err) {
 			console.error(err);

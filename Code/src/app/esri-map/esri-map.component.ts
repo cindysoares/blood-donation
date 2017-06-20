@@ -115,7 +115,7 @@ export class EsriMapComponent implements OnInit {
   		) {
 		  
       var point = new Point({
-        longitude: donor.loc[0], latitude: donor.loc[1]
+        longitude: donor.loc.coordinates[0], latitude: donor.loc.coordinates[1]
       });
 			var marker = new SimpleMarkerSymbol({
 			  	color: "red"
@@ -154,10 +154,10 @@ export class EsriMapComponent implements OnInit {
   }
 
   markNearestDonors(view) {
-    this.donorsService.getDonors([view.center.longitude, view.center.latitude], 10).subscribe(donors => {
+    this.donorsService.getDonors([view.center.longitude, view.center.latitude], Math.ceil(view.extent.width/2)).subscribe(donors => {
       this.donors = donors;
       this.createMarkerForDonors(view, this.donors);
-    });
+    }, console.error);
   }
 
 }
