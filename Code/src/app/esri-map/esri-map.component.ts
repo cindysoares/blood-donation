@@ -145,14 +145,16 @@ export class EsriMapComponent implements OnInit {
 		  locateWidget.locate().then(function(){
 			  var lon = locateWidget.graphic.geometry.longitude;
 			  var lat = locateWidget.graphic.geometry.latitude;
-  			view.goTo({center: [lon, lat], zoom: 15})
-        component.markNearestDonors(view, [lon, lat]);
+  			view.goTo({center: [lon, lat], zoom: 15}).then(function(){
+          component.markNearestDonors(view);
+        })
+        
 		  });
   	});
   }
 
-  markNearestDonors(view, coordinates) {
-    this.donorsService.getDonors(coordinates, 10).subscribe(donors => {
+  markNearestDonors(view) {
+    this.donorsService.getDonors([view.center.longitude, view.center.latitude], 10).subscribe(donors => {
       this.donors = donors;
       this.createMarkerForDonors(view, this.donors);
     });
