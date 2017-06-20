@@ -7,8 +7,13 @@ export class DonorsService {
 
 	constructor(private http: Http) { }
 
-	getDonors() {
-		return this.http.get('/api/donors')
+	getDonors(coordinates, maxDistance) {
+		console.log("> Getting donors near "+ coordinates + " at max distance equals " + maxDistance)
+		return this.http.get('/api/donors', {params: {
+				longitude: coordinates[0],
+				latitude: coordinates[1],
+				maxDistance: maxDistance
+			}})
 		  .map(res => res.json());
 	}
 }

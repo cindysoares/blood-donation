@@ -16,14 +16,11 @@ module.exports = function() {
 	    contactNumber: String,
 	    address: String,
 	    bloodGroup: String,
-	    loc: {
-	      type: {type: String},
-	      coordinates: []
-	    }
+	    loc: []
 	});
+	donorSchema.index({ loc: '2d' }, {name:'loc_index'});
 
 	var Donor = mongoose.model('Donor', donorSchema);
-
 
 	// Creating some dummy data.
 	
@@ -31,22 +28,22 @@ module.exports = function() {
 
 	var someData = [new Donor({
 		firstName: 'Agatha', bloodGroup: "A+",
-		loc: {type: "Point", coordinates: [-43.187, -22.806]}
+		loc: [-43.187, -22.806]
 	}), new Donor({
 		firstName: 'Bernie', bloodGroup: "B-",
-		loc: {type: "Point", coordinates: [-43.189, -22.799]}
+		loc: [-43.189, -22.799]
 	}), new Donor({
 		firstName: 'Carlos', bloodGroup: "O+",
-		loc: {type: "Point", coordinates: [-43.173, -22.798]}
+		loc: [-43.173, -22.798]
 	}), new Donor({
 		firstName: 'Dandara', bloodGroup: "AB+",
-		loc: {type: "Point", coordinates: [-43.18, -22.814]}
+		loc: [-43.18, -22.814]
 	}), new Donor({
 		firstName: 'Ethan', bloodGroup: "AB+",
-		loc: {type: "Point", coordinates: [-48.18, -10.814]}
+		loc: [-48.18, -10.814]
 	}), new Donor({
 		firstName: 'Fany', bloodGroup: "AB+",
-		loc: {type: "Point", coordinates: [-43.450, -22.76]}
+		loc: [-43.450, -22.76]
 	})];
 
 	someData.forEach(function(donor, index, arr) {

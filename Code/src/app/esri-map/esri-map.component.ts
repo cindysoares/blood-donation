@@ -53,7 +53,8 @@ export class EsriMapComponent implements OnInit {
 
         this.setOpenDonorFormOnClick(this.mapView);
         
-        this.donorsService.getDonors().subscribe(donors => {
+        console.log(this.mapView.center);
+        this.donorsService.getDonors([this.mapView.center.longitude, this.mapView.center.latitude], 1000).subscribe(donors => {
           this.donors = donors;
           this.createMarkerForDonors(this.mapView, this.donors);
         });        
@@ -120,7 +121,7 @@ export class EsriMapComponent implements OnInit {
   		) {
 		  
       var point = new Point({
-        longitude: donor.loc.coordinates[0], latitude: donor.loc.coordinates[1]
+        longitude: donor.loc[0], latitude: donor.loc[1]
       });
 			var marker = new SimpleMarkerSymbol({
 			  	color: "red"
