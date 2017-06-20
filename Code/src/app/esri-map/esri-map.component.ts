@@ -49,7 +49,9 @@ export class EsriMapComponent implements OnInit {
         };
 
         this.mapView = new MapView(mapViewProperties);
-        this.locate(this.mapView);
+
+        this.addSearchWidget(this.mapView);
+        this.locate(this.mapView);        
 
         this.setOpenDonorFormOnClick(this.mapView);      
 
@@ -151,6 +153,20 @@ export class EsriMapComponent implements OnInit {
         
 		  });
   	});
+  }
+
+  addSearchWidget(view) {
+    var component = this;
+    this.esriLoader.require(["esri/widgets/Search"], function(Search) {
+      var searchWidget = new Search({
+        view: view
+      });
+    
+      view.ui.add(searchWidget, {
+        position: "top-right",
+        index: 2
+      });
+    });
   }
 
   markNearestDonors(view) {
