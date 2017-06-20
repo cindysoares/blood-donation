@@ -51,13 +51,7 @@ export class EsriMapComponent implements OnInit {
         this.mapView = new MapView(mapViewProperties);
         this.locate(this.mapView);
 
-        this.setOpenDonorFormOnClick(this.mapView);
-        
-        console.log(this.mapView.center);
-        this.donorsService.getDonors([this.mapView.center.longitude, this.mapView.center.latitude], 1000).subscribe(donors => {
-          this.donors = donors;
-          this.createMarkerForDonors(this.mapView, this.donors);
-        });        
+        this.setOpenDonorFormOnClick(this.mapView);      
 
       });
     });
@@ -141,18 +135,27 @@ export class EsriMapComponent implements OnInit {
   }
 
   locate(view) {
+    var component = this;
   	this.esriLoader.require(["esri/widgets/Locate"], function(Locate) {
   		var locateWidget = new Locate({
   			view: view,
   			goToLocationEnabled: false
-		}, "locateDiv");
+		  }, "locateDiv");
 
-		locateWidget.locate().then(function(){
-			var lon = locateWidget.graphic.geometry.longitude;
-			var lat = locateWidget.graphic.geometry.latitude;
+		  locateWidget.locate().then(function(){
+			  var lon = locateWidget.graphic.geometry.longitude;
+			  var lat = locateWidget.graphic.geometry.latitude;
   			view.goTo({center: [lon, lat], zoom: 15})
-		});
+        component.markNearestDonors(view, [lon, lat]);
+		  });
   	});
+  }
+
+  markNearestDonors(view, coordinates) {
+    this.donorsService.getDonors(coordinates, 10).subscribe(donors => {
+      this.donors = donors;
+      this.createMarkerForDonors(view, this.donors);
+    });
   }
 
 }
