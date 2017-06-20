@@ -51,12 +51,24 @@ export class EsriMapComponent implements OnInit {
         this.mapView = new MapView(mapViewProperties);
 
         this.addSearchWidget(this.mapView);
+        
         this.locate(this.mapView);        
 
-        this.setOpenDonorFormOnClick(this.mapView);      
+        this.setOpenDonorFormOnClick(this.mapView);  
 
       });
     });
+  }
+
+  markDonorsWhenTheMapViewChange(view) {
+    var component = this;
+    this.esriLoader.require(["esri/core/watchUtils"], function(watchUtils) {
+      watchUtils.whenTrue(view, "stationary", function() {
+          if (view.center) {
+            component.markNearestDonors(view);
+          }
+        });
+    })
   }
 
   setOpenDonorFormOnClick(view) {
@@ -148,7 +160,7 @@ export class EsriMapComponent implements OnInit {
 			  var lon = locateWidget.graphic.geometry.longitude;
 			  var lat = locateWidget.graphic.geometry.latitude;
   			view.goTo({center: [lon, lat], zoom: 15}).then(function(){
-          component.markNearestDonors(view);
+          component.markDonorsWhenTheMapViewChange(view);
         })
         
 		  });
