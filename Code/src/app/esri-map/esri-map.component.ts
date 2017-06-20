@@ -56,7 +56,22 @@ export class EsriMapComponent implements OnInit {
 
         this.setOpenDonorFormOnClick(this.mapView);  
 
+        this.configurePopup(this.mapView);
+
       });
+    });
+  }
+
+  configurePopup(view) {
+    var popup = view.popup;
+    popup.actions=[];
+    popup.on("trigger-action", function(event){
+      var component = this;
+      if(event.action.id === "showInfo"){
+        console.log(popup);
+        popup.content = "{firstName} {lastName}<br/>{contactNumber}<br/>{email}<br/>{address}</p>"
+        popup.actions=[];
+      }
     });
   }
 
@@ -140,9 +155,14 @@ export class EsriMapComponent implements OnInit {
 				symbol: marker,
 				attributes: donor,
 				popupTemplate: {
-      				title: "{firstName} {lastName} ({bloodGroup})",
-					content: "<a link=\"#\">click to show</a>"
-		      	}
+      				title: "{bloodGroup}",
+              actions: [{
+                title: "click to show",
+                id: "showInfo",
+                className: "esri-icon-down"
+              }],
+					    content: "Name: {firstName} {lastName}"
+		    }
 			});
 			view.graphics.add(polylineGraphic);
   	});
