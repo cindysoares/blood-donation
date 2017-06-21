@@ -51,7 +51,9 @@ export class EsriMapComponent implements OnInit {
         this.mapView = new MapView(mapViewProperties);
 
         this.addSearchWidget(this.mapView);
-        
+
+        this.markDonorsWhenTheMapViewChange(this.mapView)
+
         this.locate(this.mapView);        
 
         this.setOpenDonorFormOnClick(this.mapView);  
@@ -153,13 +155,10 @@ export class EsriMapComponent implements OnInit {
   			goToLocationEnabled: false
 		  }, "locateDiv");
 
-		  locateWidget.locate().then(function(){
+		  locateWidget.locate().then(function(err){
 			  var lon = locateWidget.graphic.geometry.longitude;
 			  var lat = locateWidget.graphic.geometry.latitude;
-  			view.goTo({center: [lon, lat], zoom: 15}).then(function(){
-          component.markDonorsWhenTheMapViewChange(view);
-        })
-        
+  			view.goTo({center: [lon, lat], zoom: 15});
 		  });
   	});
   }
@@ -179,10 +178,13 @@ export class EsriMapComponent implements OnInit {
   }
 
   markNearestDonors(view) {
-    this.donorsService.getDonors([view.center.longitude, view.center.latitude], Math.ceil(view.extent.width/2)).subscribe(donors => {
-      this.donors = donors;
-      this.createMarkerForDonors(view, this.donors);
-    }, console.error);
+    if(view.extent && view.extent.width) {
+      this.donorsService.getDonors([view.center.longitude, view.center.latitude], Math.ceil(view.extent.width/2)).subscribe(donors => {
+        this.donors = donors;
+        console.log('> ' + this.donors.length + ' donors to draw');
+        this.createMarkerForDonors(view, this.donors);
+      }, console.error);
+    }
   }
 
 }
