@@ -20,12 +20,26 @@ export class EsriMapComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
+    this.loadPosition();
+  }
+
+  loadPosition() {
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(this.loadMap.bind(this), this.loadMap.bind(this), { enableHighAccuracy: false, timeout: 5000, maximumAge: 300000 });
+    } else {
+      console.log('Geolocation is not supported by this browser.')
+      this.loadMap(null);
+    }
+  }
+
+  loadMap(position) {
     return this.esriLoader.load({
       url: 'https://js.arcgis.com/4.3/'
     }).then(() => {
       this.esriLoader.loadModules([
         'esri/Map',
         'esri/views/MapView',
+        'esri/layers/FeatureLayer',
         'esri/geometry/Point',
         'esri/symbols/SimpleMarkerSymbol',        
         'esri/Graphic',
@@ -36,6 +50,7 @@ export class EsriMapComponent implements OnInit {
       ]).then(([
         Map,
         MapView, 
+        FeatureLayer,
         Point,
         SimpleMarkerSymbol,
         Graphic,
@@ -49,18 +64,23 @@ export class EsriMapComponent implements OnInit {
 
         const mapViewProperties = {
           container: this.mapViewEl.nativeElement, 
-          center: [0, 0],
-          zoom: 2,    
           map 
         };
+        if(position && position.coords) {
+          mapViewProperties['center']=[position.coords.longitude, position.coords.latitude]
+          mapViewProperties['zoom']=15
+        } else {
+          mapViewProperties['center']=[0, 0]
+          mapViewProperties['zoom']=2
+        }
 
-        this.mapView = new MapView(mapViewProperties);
+        var view = this.mapView = new MapView(mapViewProperties);
 
         addSearchWidget(this.mapView);
 
         markDonorsWhenTheMapViewChange(this.mapView)
 
-        locate(this.mapView);        
+        addLocateWidget(this.mapView);        
 
         setOpenDonorFormOnClick(this.mapView);  
 
@@ -130,17 +150,12 @@ export class EsriMapComponent implements OnInit {
     			view.graphics.add(polylineGraphic);
         }
 
-        function locate(view) {
+        function addLocateWidget(view) {
       		var locateWidget = new Locate({
-      			view: view,
-      			goToLocationEnabled: false
+      			view: view
     		  }, "locateDiv");
 
-    		  locateWidget.locate().then(function(err){
-    			  var lon = locateWidget.graphic.geometry.longitude;
-    			  var lat = locateWidget.graphic.geometry.latitude;
-      			view.goTo({center: [lon, lat], zoom: 15});
-    		  });
+    		  view.ui.add(locateWidget, "top-left");
         }
 
         function addSearchWidget(view) {
@@ -148,10 +163,7 @@ export class EsriMapComponent implements OnInit {
             view: view
           });
         
-          view.ui.add(searchWidget, {
-            position: "top-right",
-            index: 2
-          });
+          view.ui.add(searchWidget, "top-right");
         }
 
         function markNearestDonors(view) {
