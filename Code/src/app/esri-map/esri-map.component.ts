@@ -58,6 +58,8 @@ export class EsriMapComponent implements OnInit {
 
         this.setOpenDonorFormOnClick(this.mapView);  
 
+        this.donorsService.createDonor({firstName: 'Cindy', 'loc.coordinates': [0,0]});
+
       });
     });
   }
