@@ -31,4 +31,10 @@ router.get('/donors', (req, res) => {
 	})
 });
 
+router.post('/donors', (req, res) => {
+	console.log('> POST /donors')
+	console.log(req.body)
+	res.status(200).json("id");
+});
+
 module.exports = router;

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 
 @Injectable()
@@ -15,5 +15,10 @@ export class DonorsService {
 				maxDistance: maxDistance
 			}})
 		  .map(res => res.json());
+	}
+
+	createDonor(donor) {
+		console.log("> Creating new donor");
+		return this.http.post('/api/donors', donor);
 	}
 }
