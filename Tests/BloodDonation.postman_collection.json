@@ -1,0 +1,157 @@
+{
+	"id": "2f2cba99-48e9-9937-5312-63331208b94e",
+	"name": "BloodDonation",
+	"description": "",
+	"order": [
+		"28d82975-a0e9-f44b-0531-36a9b59125de",
+		"f25d802f-61b5-3b30-622d-175fe3ed4148",
+		"bcb10aa9-9afb-5c32-7903-c897ac9dda7d",
+		"3167acc0-1d86-19a5-7f54-e9367ce979e9"
+	],
+	"folders": [],
+	"timestamp": 1498145435472,
+	"owner": "2263949",
+	"public": false,
+	"requests": [
+		{
+			"id": "28d82975-a0e9-f44b-0531-36a9b59125de",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://localhost:3000/api/donors",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "POST",
+			"collectionId": "2f2cba99-48e9-9937-5312-63331208b94e",
+			"data": [],
+			"dataMode": "raw",
+			"name": "createNewDonor",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1498145560201,
+			"version": 2,
+			"responses": [],
+			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"rawModeData": " {\n\"firstName\": \"Cindy\",\n\"lastName\": \"Soares\",\n\"bloodGroup\": \"A+\",\n\"contactNumber\": \"+55 21 99999999\",\n\"emailAddress\": \"cindy@email.com\",\n\"loc\": {\"coordinates\": [0, 0]}\n}"
+		},
+		{
+			"id": "3167acc0-1d86-19a5-7f54-e9367ce979e9",
+			"headers": "",
+			"headerData": [],
+			"url": "http://localhost:3000/api/donors?longitude=-43.18&latitude=-22.80&maxDistance=1000",
+			"queryParams": [
+				{
+					"key": "longitude",
+					"value": "-43.18",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "latitude",
+					"value": "-22.80",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "maxDistance",
+					"value": "1000",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": null,
+			"dataMode": "params",
+			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\n\n\nvar jsonData = JSON.parse(responseBody);\ntests[\"should return 3 donor\"] = jsonData.length === 3;",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1498146129492,
+			"name": "getDonorsByDistance1000meters",
+			"description": "",
+			"collectionId": "2f2cba99-48e9-9937-5312-63331208b94e",
+			"responses": []
+		},
+		{
+			"id": "bcb10aa9-9afb-5c32-7903-c897ac9dda7d",
+			"headers": "",
+			"headerData": [],
+			"url": "http://localhost:3000/api/donors?longitude=-43.18&latitude=-22.80&maxDistance=800",
+			"queryParams": [
+				{
+					"key": "longitude",
+					"value": "-43.18",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "latitude",
+					"value": "-22.80",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "maxDistance",
+					"value": "800",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "GET",
+			"collectionId": "2f2cba99-48e9-9937-5312-63331208b94e",
+			"data": null,
+			"dataMode": "params",
+			"name": "getDonorsByDistance800meters",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1498146075675,
+			"version": 2,
+			"responses": [],
+			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\n\n\nvar jsonData = JSON.parse(responseBody);\ntests[\"should return 1 donor\"] = jsonData.length === 1;\ntests[\"first name should be Carlos\"] = jsonData[0].firstName === \"Carlos\";",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "f25d802f-61b5-3b30-622d-175fe3ed4148",
+			"headers": "",
+			"headerData": [],
+			"url": "http://localhost:3000/api/donors/594be2e74ac80f2797a3743e",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": null,
+			"dataMode": "params",
+			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\nvar jsonData = JSON.parse(responseBody);\ntests[\"firstName value\"] = jsonData.firstName === \"Cindy\";\ntests[\"longitude value\"] = jsonData.loc.coordinates[0] === 0;\ntests[\"latitude value\"] = jsonData.loc.coordinates[1] === 0;",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1498145835838,
+			"name": "getDonorById",
+			"description": "",
+			"collectionId": "2f2cba99-48e9-9937-5312-63331208b94e",
+			"responses": []
+		}
+	]
+}
