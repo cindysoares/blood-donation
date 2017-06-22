@@ -99,12 +99,28 @@ export class EsriMapComponent implements OnInit {
         function setOpenDonorFormOnClick(view) {
           var editArea = dom.byId("editArea");
           var input_firstName = dom.byId("input_firstName");
+          var input_lastName = dom.byId("input_lastName");
+          var input_bloodGroup = dom.byId("input_bloodGroup");
+          var input_contactNumber = dom.byId("input_contactNumber");
+          var input_emailAddress = dom.byId("input_emailAddress");
 
           on(dom.byId("btnSave"), "click", function(evt) {
-            service.createDonor({
+            var newDonor = {
               firstName: input_firstName.value, 
-              'loc.coordinates': [view.popup.location.longitude, view.popup.location.latitude]
-              });
+              lastName: input_lastName.value,
+              bloodGroup: input_bloodGroup.value,
+              contactNumber: input_contactNumber.value,
+              emailAddress: input_emailAddress.value,
+              loc: {coordinates: [view.popup.location.longitude, view.popup.location.latitude]}
+              };
+            service.createDonor(newDonor);
+            createAMarkerAt(view, newDonor);
+
+            input_firstName.value=null;
+            input_lastName.value=null;
+            input_bloodGroup.value=null;
+            input_contactNumber.value=null;
+            input_emailAddress.value=null;
           });
 
         	view.on("click", function(event) {
