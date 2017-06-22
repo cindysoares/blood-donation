@@ -19,15 +19,6 @@ export class DonorsService {
 
 	createDonor(donor) {
 		console.log("> Creating new donor");
-		return this.http.post('/api/donors', donor).map(res => res.json()).subscribe(
-    function (x) {
-        console.log('Next: ' + x);
-    },
-    function (err) {
-        console.log('Error: ' + err);
-    },
-    function () {
-        console.log('Completed');
-    });
+		return this.http.post('/api/donors', donor).map(res => res.json());
 	}
 }

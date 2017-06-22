@@ -98,6 +98,7 @@ export class EsriMapComponent implements OnInit {
 
         function setOpenDonorFormOnClick(view) {
           var editArea = dom.byId("editArea");
+
           var input_firstName = dom.byId("input_firstName");
           var input_lastName = dom.byId("input_lastName");
           var input_bloodGroup = dom.byId("input_bloodGroup");
@@ -113,14 +114,24 @@ export class EsriMapComponent implements OnInit {
               emailAddress: input_emailAddress.value,
               loc: {coordinates: [view.popup.location.longitude, view.popup.location.latitude]}
               };
-            service.createDonor(newDonor);
-            createAMarkerAt(view, newDonor);
+            var id = service.createDonor(newDonor).subscribe(id => {
+              createAMarkerAt(view, newDonor);
 
-            input_firstName.value=null;
-            input_lastName.value=null;
-            input_bloodGroup.value=null;
-            input_contactNumber.value=null;
-            input_emailAddress.value=null;
+              input_firstName.value=null;
+              input_lastName.value=null;
+              input_bloodGroup.value=null;
+              input_contactNumber.value=null;
+              input_emailAddress.value=null;
+
+              var urlToUpdate = 'http://localhost:3000?id=' + id;
+              view.popup.open({
+                  title: "Congratulations",
+                  attributes: newDonor,
+                  location: {longitude: newDonor.loc.coordinates[0], latitude: newDonor.loc.coordinates[1]},
+                  content: newDonor.firstName + ', you are a new donor. To update your informations use the URL above.<br/><a href=\"'+ urlToUpdate + '\">'+ urlToUpdate + '</a>'
+              });
+            }, console.error);
+            
           });
 
         	view.on("click", function(event) {
