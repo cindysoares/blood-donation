@@ -1,9 +1,20 @@
+Blood Donation App
 
-Install angular-cli
-npm install -g angular-cli
+Installations
 
-Install TypeScript
-> npm install -g typescript
+1) MongoDB 4.3 (https://docs.mongodb.com/manual/installation/)
+2) NodeJS 5.0.3 (https://nodejs.org)
+3) Angular CLI (https://cli.angular.io/)
+   > npm install -g angular-cli
 
-Compile sources and run server
-> npm run build
+How to run
+
+1) Start MongoDB service
+   > sudo service mongod start (On linux)
+
+2) Run the build command in Code/
+   > npm run build
+
+3) Browse the url http://localhost:3000/
+
+
