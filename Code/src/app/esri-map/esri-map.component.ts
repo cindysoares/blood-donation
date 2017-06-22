@@ -103,8 +103,8 @@ export class EsriMapComponent implements OnInit {
           on(dom.byId("btnSave"), "click", function(evt) {
             service.createDonor({
               firstName: input_firstName.value, 
-              'loc.coordinates': [view.popup.longitude,view.popup.latitude]
-            });
+              'loc.coordinates': [view.popup.location.longitude, view.popup.location.latitude]
+              });
           });
 
         	view.on("click", function(event) {
