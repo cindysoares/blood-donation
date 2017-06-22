@@ -1,1 +1,15 @@
 <div #mapViewNode></div>
+<div id="editArea" class="editArea-container" style = "display:none">
+  <div id="attributeArea">
+    <label for="firstName">First Name:</label>
+    <input class="inputInfo" type="text" id="firstName" placeHolder="Enter first name"><br>
+    <label for="emailAddress">Email Address:</label>
+    <input class="inputInfo" required type="email" name="email" id="emailAddress" pattern="[^ @]*@[^ @]*"
+      placeHolder="Enter email address"><br>
+    <input type="button" class="edit-button" value="Update incident info" id="btnUpdate">
+  </div>
+
+  <div id="deleteArea">
+    <input type="button" class="edit-button" value="Delete incident" id="btnDelete">
+  </div>
+</div>

@@ -46,6 +46,7 @@ export class EsriMapComponent implements OnInit {
         'esri/widgets/Search',
         'esri/widgets/Locate',
         'esri/core/watchUtils',
+        "dojo/dom",
   		'dojo/domReady!'
       ]).then(([
         Map,
@@ -56,7 +57,8 @@ export class EsriMapComponent implements OnInit {
         Graphic,
         Search,
         Locate,
-        watchUtils
+        watchUtils,
+        dom
       ]) => {
 
         const service = this.donorsService;
@@ -95,31 +97,19 @@ export class EsriMapComponent implements OnInit {
         }
 
         function setOpenDonorFormOnClick(view) {
+          var editArea = dom.byId("editArea");
         	view.on("click", function(event) {
           	var lat = Math.round(event.mapPoint.latitude * 1000) / 1000;
           	var lon = Math.round(event.mapPoint.longitude * 1000) / 1000;
+
+            editArea.style.display = 'block';
 
           	view.popup.clear();
           	view.popup.dockOptions = {buttonEnabled: false, breakpoint: false};
           	view.popup.open({
               	title: "New Donor Information",
               	location: {longitude: lon, latitude: lat},
-              	content: "Aqui entra o formulario"/*[{
-      		        	type: "fields",
-      		        	fieldInfos: [{
-      		          		fieldName: "firstName",
-      		          		label: "First Name"
-      		        	}, {
-      		          		fieldName: "lastName",
-      		          		label: "Last Name"
-      		        	}, {
-      		          		fieldName: "contactNumber",
-      		          		label: "Contact Number"
-      		        	}, {
-      		          		fieldName: "bloodGroup",
-      		          		label: "BloodGroup"
-      		        	}]
-      		      	}]*/
+              	content: editArea
           	});
       	});
         }
