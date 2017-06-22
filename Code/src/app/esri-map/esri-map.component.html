@@ -1,15 +1,22 @@
 <div #mapViewNode></div>
-<div id="editArea" class="editArea-container" style = "display:none">
+<div id="editArea" style = "display:none">
   <div id="attributeArea">
-    <label for="firstName">First Name:</label>
-    <input class="inputInfo" type="text" id="firstName" placeHolder="Enter first name"><br>
-    <label for="emailAddress">Email Address:</label>
-    <input class="inputInfo" required type="email" name="email" id="emailAddress" pattern="[^ @]*@[^ @]*"
+    <label for="input_firstName">First Name:</label>
+    <input type="text" id="input_firstName" placeHolder="Enter first name"><br>
+    <label for="input_lastName">Last Name:</label>
+    <input type="text" id="input_lastName" placeHolder="Enter last name"><br>
+    <label for="input_bloodGroup">Blood Group:</label>
+    <input type="text" id="input_bloodGroup" placeHolder="Enter blood group"><br>
+    <label for="input_contactNumber">Contact Number:</label>
+    <input type="text" id="input_contactNumber" placeHolder="(+xx
+xxx xxxx xxx | 00xx xxx xxxx xxx)"><br>
+    <label for="input_emailAddress">Email Address:</label>
+    <input required type="email" name="input_emailAddress" id="emailAddress" pattern="[^ @]*@[^ @]*"
       placeHolder="Enter email address"><br>
-    <input type="button" class="edit-button" value="Update incident info" id="btnUpdate">
+    <input type="button" value="Save" id="btnSave">
   </div>
 
-  <div id="deleteArea">
-    <input type="button" class="edit-button" value="Delete incident" id="btnDelete">
+  <div id="deleteArea" style="display: none">
+    <input type="button" value="Delete" id="btnDelete">
   </div>
 </div>

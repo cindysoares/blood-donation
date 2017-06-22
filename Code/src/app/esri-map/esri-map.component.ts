@@ -46,6 +46,7 @@ export class EsriMapComponent implements OnInit {
         'esri/widgets/Search',
         'esri/widgets/Locate',
         'esri/core/watchUtils',
+        "dojo/on",
         "dojo/dom",
   		'dojo/domReady!'
       ]).then(([
@@ -58,6 +59,7 @@ export class EsriMapComponent implements OnInit {
         Search,
         Locate,
         watchUtils,
+        on,
         dom
       ]) => {
 
@@ -86,8 +88,6 @@ export class EsriMapComponent implements OnInit {
 
         setOpenDonorFormOnClick(this.mapView);  
 
-        service.createDonor({firstName: 'Cindy', 'loc.coordinates': [0,0]});
-
         function markDonorsWhenTheMapViewChange(view) {
           watchUtils.whenTrue(view, "stationary", function() {
               if (view.center) {
@@ -98,6 +98,15 @@ export class EsriMapComponent implements OnInit {
 
         function setOpenDonorFormOnClick(view) {
           var editArea = dom.byId("editArea");
+          var input_firstName = dom.byId("input_firstName");
+
+          on(dom.byId("btnSave"), "click", function(evt) {
+            service.createDonor({
+              firstName: input_firstName.value, 
+              'loc.coordinates': [view.popup.longitude,view.popup.latitude]
+            });
+          });
+
         	view.on("click", function(event) {
           	var lat = Math.round(event.mapPoint.latitude * 1000) / 1000;
           	var lon = Math.round(event.mapPoint.longitude * 1000) / 1000;
