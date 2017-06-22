@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { EsriLoaderService } from 'angular2-esri-loader';
+import { ActivatedRoute } from '@angular/router';
 
 import { DonorsService } from '../donors.service';
 
@@ -14,13 +15,34 @@ export class EsriMapComponent implements OnInit {
 
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
 
+  donorToUpdate: Object
+
   constructor(
     private esriLoader: EsriLoaderService,
-    private donorsService: DonorsService
+    private donorsService: DonorsService,
+    private activatedRoute: ActivatedRoute
   ) { }
 
   public ngOnInit() {
-    this.loadPosition();
+    this.activatedRoute.queryParams.subscribe((params) => {
+      var donorId = params['id'];
+      if(donorId) {
+        console.log(donorId);
+        this.donorsService.getDonor(donorId).subscribe(donor => {
+          console.log(donor);
+          this.donorToUpdate = donor;
+          this.loadMap({coords: {
+            longitude: donor.loc.coordinates[0], 
+            latitude: donor.loc.coordinates[1]
+          }});
+        }, err => {
+          console.error(err);
+          this.loadPosition();  
+        });        
+      } else {
+        this.loadPosition();
+      }
+    });    
   }
 
   loadPosition() {
