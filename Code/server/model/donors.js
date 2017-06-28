@@ -1,14 +1,6 @@
-var dbURL = 'mongodb://localhost/bloodDonation'
 var mongoose = require('mongoose');
 
 module.exports = function() { 
-	mongoose.connect(dbURL);
-
-	var db = mongoose.connection;
-	db.on('error', console.error.bind(console, 'connection error:'));
-	db.once('open', function(error) {
-	  	console.log("Connected to MongoDB: " + dbURL);
-	});
 
 	var donorSchema = mongoose.Schema({
 	    firstName: String,
