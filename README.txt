@@ -13,7 +13,7 @@ How to run
    > sudo service mongod start (On linux)
 
 2) Run the build command in Code/
-   > npm run build
+   > npm run build start
 
 3) Browse the url http://localhost:3000/
 
