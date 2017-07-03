@@ -1,1 +1,2 @@
-sh -c 'cd ./Code/ && npm run build start'
+codedir: sh -c 'cd ./Code/'
+web: node index.js
