@@ -23,7 +23,8 @@ export class DonorsService {
 	}
 
 	getDonor(id) {
-		return this.http.get('/api/donor/'+id).map(res => {
+		console.log("> Getting donor with id " + id + ": " + '/api/donor/'+id)
+		return this.http.get('/api/donors/'+id).map(res => {
 			console.log(res);
 			return res.json();
 		});
