@@ -113,8 +113,6 @@ export class EsriMapComponent implements OnInit {
 
         var donorToUpdate = this.donorToUpdate;
         view.then(function() {
-          console.log("donor to update")
-          console.log(donorToUpdate);
           if(donorToUpdate) {        
             openEditArea(dom.byId("editArea"), view.center.clone(), donorToUpdate);
           }
@@ -136,55 +134,72 @@ export class EsriMapComponent implements OnInit {
           var input_bloodGroup = dom.byId("input_bloodGroup");
           var input_contactNumber = dom.byId("input_contactNumber");
           var input_emailAddress = dom.byId("input_emailAddress");
+          var input_id = dom.byId("input_id");
 
           on(dom.byId("btnSave"), "click", function(evt) {
+            var donorId = input_id.value;
             var newDonor = {
               firstName: input_firstName.value, 
               lastName: input_lastName.value,
               bloodGroup: input_bloodGroup.value,
               contactNumber: input_contactNumber.value,
-              emailAddress: input_emailAddress.value,
+              email: input_emailAddress.value,
               loc: {coordinates: [view.popup.location.longitude, view.popup.location.latitude]}
               };
-            var id = service.createDonor(newDonor).subscribe(id => {
-              createAMarkerAt(view, newDonor);
+            if(donorId) {
+              openSaveMessage(newDonor, donorId)
 
-              input_firstName.value=null;
-              input_lastName.value=null;
-              input_bloodGroup.value=null;
-              input_contactNumber.value=null;
-              input_emailAddress.value=null;
+            } else {
+              service.createDonor(newDonor).subscribe(id => {
+                createAMarkerAt(view, newDonor);
+                console.log("new donor => " + id);
 
-              var urlToUpdate = 'http://localhost:3000?id=' + id;
-              view.popup.open({
-                  title: "Congratulations",
-                  attributes: newDonor,
-                  location: {longitude: newDonor.loc.coordinates[0], latitude: newDonor.loc.coordinates[1]},
-                  content: newDonor.firstName + ', you are a new donor. To update your informations use the URL above.<br/><a href=\"'+ urlToUpdate + '\">'+ urlToUpdate + '</a>'
-              });
-            }, console.error);
-            
+                input_firstName.value=null;
+                input_lastName.value=null;
+                input_bloodGroup.value=null;
+                input_contactNumber.value=null;
+                input_emailAddress.value=null;
+                input_id.value=null;
+
+                openSaveMessage(newDonor, id)
+              }, console.error);
+            }
           });
 
         	view.on("click", function(event) {
           	var lat = Math.round(event.mapPoint.latitude * 1000) / 1000;
           	var lon = Math.round(event.mapPoint.longitude * 1000) / 1000;
+            
+            input_firstName.value=null;
+            input_lastName.value=null;
+            input_bloodGroup.value=null;
+            input_contactNumber.value=null;
+            input_emailAddress.value=null;
+            input_id.value=null;
 
             openEditArea(editArea, {longitude: lon, latitude: lat})
-
           	
       	   });
         }
 
+        function openSaveMessage(newDonor, donorId) {
+          var urlToUpdate = 'http://localhost:3000?id=' + donorId;
+          view.popup.open({
+              title: "Information saved",
+              attributes: newDonor,
+              location: {longitude: newDonor.loc.coordinates[0], latitude: newDonor.loc.coordinates[1]},
+              content: 'Hi, ' + newDonor.firstName + '. To update your informations use the URL below.<br/><a href=\"'+ urlToUpdate + '\">'+ urlToUpdate + '</a>'
+          });
+        }
+
         function openEditArea(editArea, point, donor=null) {
-          console.log("donor to update")
-          console.log(donor)
           if(donor) {
+            dom.byId("input_id").value = donor._id;
             dom.byId("input_firstName").value = donor.firstName;
             dom.byId("input_lastName").value = donor.lastName;
             dom.byId("input_bloodGroup").value = donor.bloodGroup;
             dom.byId("input_contactNumber").value = donor.contactNumber;
-            dom.byId("input_emailAddress").value = donor.emailAddress;
+            dom.byId("input_emailAddress").value = donor.email;
           }
 
           editArea.style.display = 'block';
