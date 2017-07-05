@@ -111,6 +111,15 @@ export class EsriMapComponent implements OnInit {
 
         setOpenDonorFormOnClick(this.mapView);  
 
+        var donorToUpdate = this.donorToUpdate;
+        view.then(function() {
+          console.log("donor to update")
+          console.log(donorToUpdate);
+          if(donorToUpdate) {        
+            openEditArea(dom.byId("editArea"), view.center.clone(), donorToUpdate);
+          }
+        });
+
         function markDonorsWhenTheMapViewChange(view) {
           watchUtils.whenTrue(view, "stationary", function() {
               if (view.center) {
@@ -161,16 +170,31 @@ export class EsriMapComponent implements OnInit {
           	var lat = Math.round(event.mapPoint.latitude * 1000) / 1000;
           	var lon = Math.round(event.mapPoint.longitude * 1000) / 1000;
 
-            editArea.style.display = 'block';
+            openEditArea(editArea, {longitude: lon, latitude: lat})
 
-          	view.popup.clear();
-          	view.popup.dockOptions = {buttonEnabled: false, breakpoint: false};
-          	view.popup.open({
-              	title: "New Donor Information",
-              	location: {longitude: lon, latitude: lat},
-              	content: editArea
-          	});
-      	});
+          	
+      	   });
+        }
+
+        function openEditArea(editArea, point, donor=null) {
+          console.log("donor to update")
+          console.log(donor)
+          if(donor) {
+            dom.byId("input_firstName").value = donor.firstName;
+            dom.byId("input_lastName").value = donor.lastName;
+            dom.byId("input_bloodGroup").value = donor.bloodGroup;
+            dom.byId("input_contactNumber").value = donor.contactNumber;
+            dom.byId("input_emailAddress").value = donor.emailAddress;
+          }
+
+          editArea.style.display = 'block';
+          view.popup.clear();
+          view.popup.dockOptions = {buttonEnabled: false, breakpoint: false};
+          view.popup.open({
+              title: "Donor Information",
+              location: point,
+              content: editArea
+          });
         }
 
         function createMarkerForDonors(view, donors) {
