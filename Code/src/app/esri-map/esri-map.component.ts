@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { EsriLoaderService } from 'angular2-esri-loader';
 import { ActivatedRoute } from '@angular/router';
+import 'rxjs/add/operator/debounceTime';
 
 import { DonorsService } from '../donors.service';
 
@@ -24,7 +25,7 @@ export class EsriMapComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
-    this.activatedRoute.queryParams.subscribe((params) => {
+    this.activatedRoute.queryParams.debounceTime(200).subscribe((params) => {
       var donorId = params['id'];
       if(donorId) {
         console.log(donorId);
