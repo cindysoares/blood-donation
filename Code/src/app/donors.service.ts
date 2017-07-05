@@ -22,6 +22,11 @@ export class DonorsService {
 		return this.http.post('/api/donors', donor).map(res => res.json());
 	}
 
+	updateDonor(donor) {
+		console.log("> Updating donor");
+		return this.http.put('/api/donors', donor).map(res => res.json());
+	}	
+
 	getDonor(id) {
 		console.log("> Getting donor with id " + id + ": " + '/api/donor/'+id)
 		return this.http.get('/api/donors/'+id).map(res => {

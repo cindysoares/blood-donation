@@ -62,4 +62,19 @@ router.post('/donors', (req, res) => {
 	});	
 });
 
+router.put('/donors', (req, res) => {
+	console.log('> PUT /donors')
+	console.log(req.body)
+	var Donor = mongoose.model('Donor');
+	var donor = new Donor(req.body);
+	Donor.findOneAndUpdate({_id: req.body._id}, {$set: donor}, function(err, donor) {
+		if(err) {
+			console.error(err);
+			res.status(500).json([])
+		} else {
+			res.status(200).json(donor);
+		}
+	});	
+});
+
 module.exports = router;

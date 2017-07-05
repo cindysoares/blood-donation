@@ -147,6 +147,9 @@ export class EsriMapComponent implements OnInit {
               loc: {coordinates: [view.popup.location.longitude, view.popup.location.latitude]}
               };
             if(donorId) {
+              newDonor['_id'] = donorId;
+              service.updateDonor(newDonor).subscribe(donor => {
+              }, console.error);
               openSaveMessage(newDonor, donorId)
 
             } else {
